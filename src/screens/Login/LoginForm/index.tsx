@@ -20,12 +20,14 @@ export const LoginForm = () => {
         name="email"
         lable="EMAIL"
         placeholder="mail@example.com"
+        leftIconName="mail-outline"
       />
       <AppInput
         control={control}
         name="password"
         lable="SENHA"
         placeholder="Sua senha"
+        leftIconName="lock-outline"
         secureTextEntry
       />
     </>
