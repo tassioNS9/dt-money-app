@@ -33,7 +33,21 @@ export const AuthContextProvider: FC<PropsWithChildren> = ({ children }) => {
     setToken(response.token);
   };
 
-  const handleRegister = async (formData: FormRegisterParams) => {};
+  const handleRegister = async ({
+    email,
+    name,
+    password,
+    confirmPassword,
+  }: FormRegisterParams): Promise<void> => {
+    const response = await authService.register({
+      email,
+      name,
+      password,
+      confirmPassword,
+    });
+    setUser(response.user);
+    setToken(response.token);
+  };
   const handleLogout = () => {};
 
   return (
