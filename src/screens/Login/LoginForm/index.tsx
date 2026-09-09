@@ -6,6 +6,8 @@ import { View, Text } from "react-native";
 import { PublicStackParamsList } from "@/routes/PublicRoutes";
 import { schema } from "./schema";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useAuthContext } from "@/Context/auth.context";
+import { AxiosError } from "axios";
 
 export interface FormLoginParams {
   email: string;
@@ -13,6 +15,8 @@ export interface FormLoginParams {
 }
 
 export const LoginForm = () => {
+  const { handleAuthenticate } = useAuthContext();
+
   const {
     control,
     handleSubmit,
@@ -27,8 +31,14 @@ export const LoginForm = () => {
 
   const navigation = useNavigation<NavigationProp<PublicStackParamsList>>();
 
-  const onSubmit = () => {
-    console.log("submit");
+  const onSubmit = async ({ email, password }: FormLoginParams) => {
+    try {
+      await handleAuthenticate({ email, password });
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.error("Error during login:", error.response?.data);
+      }
+    }
   };
 
   return (
