@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 import { schema } from "./schema";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useAuthContext } from "@/Context/auth.context";
+import { AxiosError } from "axios";
 
 export interface FormRegisterParams {
   email: string;
@@ -15,6 +17,7 @@ export interface FormRegisterParams {
 }
 
 export const RegisterForm = () => {
+  const { handleRegister } = useAuthContext();
   const {
     control,
     handleSubmit,
@@ -28,6 +31,21 @@ export const RegisterForm = () => {
     },
     resolver: yupResolver(schema),
   });
+
+  const onSubmit = async ({
+    email,
+    name,
+    password,
+    confirmPassword,
+  }: FormRegisterParams) => {
+    try {
+      await handleRegister({ email, name, password, confirmPassword });
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.log("error", error.response?.data);
+      }
+    }
+  };
 
   const navigation = useNavigation<NavigationProp<PublicStackParamsList>>();
 
@@ -68,7 +86,13 @@ export const RegisterForm = () => {
       />
 
       <View className="flex-1 justify-between mt-8 mb-4 min-h-[250px]">
-        <AppButton iconName="arrow-forward">Cadastrar</AppButton>
+        <AppButton
+          onPress={handleSubmit(onSubmit)}
+          disabled={isSubmitting}
+          iconName="arrow-forward"
+        >
+          Cadastrar
+        </AppButton>
 
         <View>
           <Text className="mb-6 text-gray-300 text-base">
