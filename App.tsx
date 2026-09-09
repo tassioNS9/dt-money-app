@@ -1,6 +1,6 @@
 import "@/styles/global.css";
 import NavigationRoutes from "@/routes";
-import { AuthContextProvider } from "@/Context/auth.context";
+import { AuthContextProvider } from "@/context/auth.context";
 
 export default function App() {
   return (

@@ -6,7 +6,7 @@ import { View, Text } from "react-native";
 import { PublicStackParamsList } from "@/routes/PublicRoutes";
 import { schema } from "./schema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useAuthContext } from "@/Context/auth.context";
+import { useAuthContext } from "@/context/auth.context";
 import { AxiosError } from "axios";
 
 export interface FormLoginParams {
@@ -62,6 +62,7 @@ export const LoginForm = () => {
       <View className="flex-1 justify-between mt-8 mb-6 min-h-[250px]">
         <AppButton
           onPress={handleSubmit(onSubmit)}
+          disabled={isSubmitting}
           iconName="arrow-forward"
           mode="fill"
         >

@@ -2,7 +2,7 @@ import { DismissKeyboardView } from "@/components/DismissKeyboard";
 import { View } from "react-native";
 import { LoginForm } from "./LoginForm";
 import { AuthHeader } from "@/components/AuthHeader";
-import { useAuthContext } from "@/Context/auth.context";
+import { useAuthContext } from "@/context/auth.context";
 
 export const Login = () => {
   const { user, token } = useAuthContext();

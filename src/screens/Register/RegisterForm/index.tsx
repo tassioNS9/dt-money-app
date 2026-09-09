@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 import { schema } from "./schema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useAuthContext } from "@/Context/auth.context";
+import { useAuthContext } from "@/context/auth.context";
 import { AxiosError } from "axios";
 
 export interface FormRegisterParams {
