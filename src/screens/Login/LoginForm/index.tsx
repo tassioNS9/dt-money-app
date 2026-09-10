@@ -8,6 +8,8 @@ import { schema } from "./schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuthContext } from "@/context/auth.context";
 import { AxiosError } from "axios";
+import { AppError } from "@/shared/helpers/AppError";
+import { useSnackbarContext } from "@/context/snackbar.context";
 
 export interface FormLoginParams {
   email: string;
@@ -16,6 +18,7 @@ export interface FormLoginParams {
 
 export const LoginForm = () => {
   const { handleAuthenticate } = useAuthContext();
+  const { notify } = useSnackbarContext();
 
   const {
     control,
@@ -31,12 +34,16 @@ export const LoginForm = () => {
 
   const navigation = useNavigation<NavigationProp<PublicStackParamsList>>();
 
-  const onSubmit = async ({ email, password }: FormLoginParams) => {
+  const onSubmit = async (userData: FormLoginParams) => {
     try {
-      await handleAuthenticate({ email, password });
+      await handleAuthenticate(userData);
     } catch (error) {
+      console.log(error instanceof AppError);
       if (error instanceof AxiosError) {
-        console.error("Error during login:", error.response?.data);
+        notify({
+          message: error.message,
+          type: "ERROR",
+        });
       }
     }
   };
