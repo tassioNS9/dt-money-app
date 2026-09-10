@@ -2,14 +2,14 @@ import { AppButton } from "@/components/AppButton";
 import { AppInput } from "@/components/AppInput";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { useForm } from "react-hook-form";
-import { View, Text } from "react-native";
+import { View, Text, ActivityIndicator } from "react-native";
 import { PublicStackParamsList } from "@/routes/PublicRoutes";
 import { schema } from "./schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuthContext } from "@/context/auth.context";
-import { AxiosError } from "axios";
 import { AppError } from "@/shared/helpers/AppError";
-import { useSnackbarContext } from "@/context/snackbar.context";
+import { useErrorHandler } from "@/shared/hooks/useErrorHandler";
+import { colors } from "@/shared/colors";
 
 export interface FormLoginParams {
   email: string;
@@ -18,7 +18,7 @@ export interface FormLoginParams {
 
 export const LoginForm = () => {
   const { handleAuthenticate } = useAuthContext();
-  const { notify } = useSnackbarContext();
+  const { handleError } = useErrorHandler();
 
   const {
     control,
@@ -39,12 +39,7 @@ export const LoginForm = () => {
       await handleAuthenticate(userData);
     } catch (error) {
       console.log(error instanceof AppError);
-      if (error instanceof AxiosError) {
-        notify({
-          message: error.message,
-          type: "ERROR",
-        });
-      }
+      handleError(error, "Falha ao autenticar usuário");
     }
   };
 
@@ -73,7 +68,7 @@ export const LoginForm = () => {
           iconName="arrow-forward"
           mode="fill"
         >
-          Login
+          {isSubmitting ? <ActivityIndicator color={colors.white} /> : "Login"}
         </AppButton>
 
         <View>
