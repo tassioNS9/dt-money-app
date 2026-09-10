@@ -3,11 +3,12 @@ import { AppInput } from "@/components/AppInput";
 import { PublicStackParamsList } from "@/routes/PublicRoutes";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { useForm } from "react-hook-form";
-import { Text, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import { schema } from "./schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuthContext } from "@/context/auth.context";
-import { AxiosError } from "axios";
+import { useErrorHandler } from "@/shared/hooks/useErrorHandler";
+import { colors } from "@/shared/colors";
 
 export interface FormRegisterParams {
   email: string;
@@ -18,6 +19,7 @@ export interface FormRegisterParams {
 
 export const RegisterForm = () => {
   const { handleRegister } = useAuthContext();
+  const { handleError } = useErrorHandler();
   const {
     control,
     handleSubmit,
@@ -41,9 +43,7 @@ export const RegisterForm = () => {
     try {
       await handleRegister({ email, name, password, confirmPassword });
     } catch (error) {
-      if (error instanceof AxiosError) {
-        console.log("error", error.response?.data);
-      }
+      handleError(error, "Falha ao cadastrar usuário");
     }
   };
 
@@ -91,7 +91,11 @@ export const RegisterForm = () => {
           disabled={isSubmitting}
           iconName="arrow-forward"
         >
-          Cadastrar
+          {isSubmitting ? (
+            <ActivityIndicator color={colors.white} />
+          ) : (
+            "Cadastrar"
+          )}
         </AppButton>
 
         <View>
