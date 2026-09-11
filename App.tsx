@@ -6,7 +6,7 @@ import { SnackbarContextProvider } from "@/context/snackbar.context";
 import { Snackbar } from "@/components/Snackbar";
 import { BottomSheetProvider } from "@/context/bottomsheet.context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { TransactionContextProvider } from "@/context/transaction.contex";
+import { TransactionContextProvider } from "@/context/transaction.context";
 
 export default function App() {
   return (
