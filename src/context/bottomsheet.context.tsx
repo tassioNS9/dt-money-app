@@ -70,12 +70,12 @@ export const BottomSheetProvider: FC<PropsWithChildren> = ({ children }) => {
       <BottomSheet
         ref={bottomSheetRef}
         snapPoints={snapPoints}
-        style={{ zIndex: 3 }}
+        style={{ zIndex: 2 }}
         index={index}
         enablePanDownToClose
         onChange={handleSheetChanges}
         backgroundStyle={{
-          backgroundColor: colors.gray[400],
+          backgroundColor: colors.gray[800],
           borderTopLeftRadius: 32,
           borderTopRightRadius: 32,
           elevation: 9,
