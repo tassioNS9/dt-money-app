@@ -7,6 +7,11 @@ import { useBottomSheetContext } from "@/context/bottomsheet.context";
 import CurrencyInput from "react-native-currency-input";
 import { TransactionTypeSelector } from "../SelectType";
 import { SelectCategoryModal } from "../SelectCategoryModal";
+import { transactionSchema } from "./schema";
+import * as Yup from "yup";
+import { AppButton } from "../AppButton";
+
+type ValidationErrorsTypes = Record<keyof CreateTransactionInterface, string>;
 
 export const NewTransaction = () => {
   const { closeBottomSheet } = useBottomSheetContext();
@@ -18,6 +23,9 @@ export const NewTransaction = () => {
     value: 0,
   });
 
+  const [validationErrors, setValidationErrors] =
+    useState<ValidationErrorsTypes>();
+
   const setTransactionData = (
     key: keyof CreateTransactionInterface,
     value: string | number,
@@ -26,6 +34,24 @@ export const NewTransaction = () => {
       ...prevData,
       [key]: value,
     }));
+  };
+
+  const handleCreateTransaction = async () => {
+    try {
+      await transactionSchema.validate(transaction, {
+        abortEarly: false,
+      });
+    } catch (error) {
+      if (error instanceof Yup.ValidationError) {
+        const errors = {} as ValidationErrorsTypes;
+        error.inner.forEach((err) => {
+          if (err.path) {
+            errors[err.path as keyof CreateTransactionInterface] = err.message;
+          }
+        });
+        setValidationErrors(errors);
+      }
+    }
   };
 
   return (
@@ -66,6 +92,9 @@ export const NewTransaction = () => {
           setTransactionType={(typeId) => setTransactionData("typeId", typeId)}
           typeId={transaction.typeId}
         />
+        <View className="my-4">
+          <AppButton onPress={handleCreateTransaction}>Registrar</AppButton>
+        </View>
       </View>
     </View>
   );
