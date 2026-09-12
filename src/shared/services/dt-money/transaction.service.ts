@@ -1,6 +1,8 @@
 import { dtMoneyApi } from "@/shared/api/dt-money";
 import { CreateTransactionInterface } from "@/shared/interfaces/https/create-transaction-request";
+import { GetTransactionsParams } from "@/shared/interfaces/https/get-transactions-response";
 import { TransactionCategory } from "@/shared/interfaces/https/transaction-category-response";
+import qs from "qs";
 
 export const getTransactionCategories = async (): Promise<
   TransactionCategory[]
@@ -16,4 +18,12 @@ export const createTransaction = async (
   transaction: CreateTransactionInterface,
 ) => {
   await dtMoneyApi.post("/transaction", transaction);
+};
+
+export const getTransactions = async (params: GetTransactionsParams) => {
+  const { data } = await dtMoneyApi.get("/transaction", {
+    params,
+    paramsSerializer: (p) => qs.stringify(p, { arrayFormat: "repeat" }),
+  });
+  return data;
 };
