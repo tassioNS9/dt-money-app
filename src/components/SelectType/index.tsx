@@ -1,4 +1,4 @@
-import { TransactionType } from "@/shared/enums/transaction-type";
+import { TransactionTypes } from "@/shared/enums/transaction-types";
 import { FC } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -6,7 +6,7 @@ import clsx from "clsx";
 import { colors } from "@/shared/colors";
 
 interface Props {
-  setTransactionType: (type: TransactionType) => void;
+  setTransactionType: (type: TransactionTypes) => void;
   typeId?: number;
 }
 
@@ -17,10 +17,10 @@ export const TransactionTypeSelector: FC<Props> = ({
   return (
     <View className="flex-row justify-between gap-2 mt-4">
       <TouchableOpacity
-        onPress={() => setTransactionType(TransactionType.REVENUE)}
+        onPress={() => setTransactionType(TransactionTypes.REVENUE)}
         className={clsx(
           "flex-row items-center p-2 flex-1 justify-center h-[58px] rounded-md",
-          typeId === TransactionType.REVENUE
+          typeId === TransactionTypes.REVENUE
             ? "bg-accent-brand-background-primary"
             : "bg-background-tertiary",
         )}
@@ -28,7 +28,7 @@ export const TransactionTypeSelector: FC<Props> = ({
         <MaterialIcons
           name="arrow-circle-up"
           color={
-            typeId === TransactionType.REVENUE
+            typeId === TransactionTypes.REVENUE
               ? colors.white
               : colors["accent-brand-light"]
           }
@@ -38,10 +38,10 @@ export const TransactionTypeSelector: FC<Props> = ({
         <Text className="text-white">Entrada</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => setTransactionType(TransactionType.EXPENSE)}
+        onPress={() => setTransactionType(TransactionTypes.EXPENSE)}
         className={clsx(
           "flex-row items-center p-2 flex-1 justify-center h-[58px] rounded-md",
-          typeId === TransactionType.EXPENSE
+          typeId === TransactionTypes.EXPENSE
             ? "bg-accent-red-background-primary"
             : "bg-background-tertiary",
         )}
@@ -49,7 +49,7 @@ export const TransactionTypeSelector: FC<Props> = ({
         <MaterialIcons
           name="arrow-circle-down"
           color={
-            typeId === TransactionType.EXPENSE
+            typeId === TransactionTypes.EXPENSE
               ? colors.white
               : colors["accent-red"]
           }
