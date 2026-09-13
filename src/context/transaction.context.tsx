@@ -49,22 +49,29 @@ export const TransactionContextProvider: FC<PropsWithChildren> = ({
 
   const [pagination, setPagination] = useState<Pagination>({
     page: 1,
-    perPage: 3,
+    perPage: 15,
     totalRows: 0,
     totalPages: 0,
   });
 
-  const refreshTransactions = async () => {
+  const refreshTransactions = useCallback(async () => {
+    const { page, perPage } = pagination;
     setLoading(true);
     const transactionsResponse = await transactionService.getTransactions({
       page: 1,
-      perPage: 10,
+      perPage: page * perPage, // Fetch all transactions up to the current page
     });
     // Do something with the fetched transactions, e.g., update state
     setTransactions(transactionsResponse.data);
     setTotalTransactions(transactionsResponse.totalTransactions);
+    setPagination({
+      ...pagination,
+      page,
+      totalRows: transactionsResponse.totalRows,
+      totalPages: transactionsResponse.totalPages,
+    });
     setLoading(false);
-  };
+  }, [pagination]);
 
   const fetchCategories = async () => {
     const categoriesResponse =
