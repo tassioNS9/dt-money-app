@@ -21,7 +21,31 @@ export const Home = () => {
     try {
       await fetchCategories();
     } catch (error) {
-      handleError(error);
+      handleError(error, "Erro ao buscar categorias");
+    }
+  };
+
+  const handleFetchInitialTransactions = async () => {
+    try {
+      await fetchTransactions({ page: 1 });
+    } catch (error) {
+      handleError(error, "Erro ao buscar transações");
+    }
+  };
+
+  const handleLoadMoreTransactions = async () => {
+    try {
+      await loadMoreTransactions();
+    } catch (error) {
+      handleError(error, "Erro ao carregar mais transações");
+    }
+  };
+
+  const handleRefreshTransactions = async () => {
+    try {
+      await refreshTransactions();
+    } catch (error) {
+      handleError(error, "Erro ao Recarregar transações");
     }
   };
 
@@ -29,7 +53,7 @@ export const Home = () => {
     (async () => {
       await Promise.all([
         handleFetchCategories(),
-        fetchTransactions({ page: 1 }),
+        handleFetchInitialTransactions(),
       ]);
     })();
   }, []);
@@ -42,12 +66,12 @@ export const Home = () => {
         data={transactions}
         keyExtractor={(item) => `transaction-${item.id}`}
         renderItem={({ item }) => <TransactionCard transaction={item} />}
-        onEndReached={loadMoreTransactions}
+        onEndReached={handleLoadMoreTransactions}
         onEndReachedThreshold={0.5}
         refreshControl={
           <RefreshControl
             refreshing={loading}
-            onRefresh={refreshTransactions}
+            onRefresh={handleRefreshTransactions}
           />
         }
       />
