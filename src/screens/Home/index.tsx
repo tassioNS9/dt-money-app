@@ -31,7 +31,7 @@ export const Home = () => {
         className="bg-background-secondary"
         ListHeaderComponent={ListHeader}
         data={transactions}
-        keyExtractor={(id) => `transaction-${id}`}
+        keyExtractor={(item) => `transaction-${item.id}`}
         renderItem={({ item }) => <TransactionCard transaction={item} />}
       />
     </SafeAreaView>
