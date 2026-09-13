@@ -7,8 +7,13 @@ import { ListHeader } from "./ListHeader";
 import { TransactionCard } from "./TransactionCard";
 
 export const Home = () => {
-  const { fetchCategories, fetchTransactions, refreshTransactions, loading } =
-    useTransactionContext();
+  const {
+    fetchCategories,
+    fetchTransactions,
+    refreshTransactions,
+    loading,
+    loadMoreTransactions,
+  } = useTransactionContext();
   const { handleError } = useErrorHandler();
   const { transactions } = useTransactionContext();
 
@@ -22,7 +27,10 @@ export const Home = () => {
 
   useEffect(() => {
     (async () => {
-      await Promise.all([handleFetchCategories(), fetchTransactions()]);
+      await Promise.all([
+        handleFetchCategories(),
+        fetchTransactions({ page: 1 }),
+      ]);
     })();
   }, []);
 
@@ -34,6 +42,8 @@ export const Home = () => {
         data={transactions}
         keyExtractor={(item) => `transaction-${item.id}`}
         renderItem={({ item }) => <TransactionCard transaction={item} />}
+        onEndReached={loadMoreTransactions}
+        onEndReachedThreshold={0.5}
         refreshControl={
           <RefreshControl
             refreshing={loading}
