@@ -2,6 +2,7 @@ import { dtMoneyApi } from "@/shared/api/dt-money";
 import { CreateTransactionInterface } from "@/shared/interfaces/https/create-transaction-request";
 import { GetTransactionsParams } from "@/shared/interfaces/https/get-transactions-response";
 import { TransactionCategory } from "@/shared/interfaces/https/transaction-category-response";
+import { UpdateTransactionInterface } from "@/shared/interfaces/https/update-transaction-request";
 import qs from "qs";
 
 export const getTransactionCategories = async (): Promise<
@@ -30,4 +31,10 @@ export const getTransactions = async (params: GetTransactionsParams) => {
 
 export const deleteTransaction = async (transactionId: number) => {
   await dtMoneyApi.delete(`/transaction/${transactionId}`);
+};
+
+export const updateTransaction = async (
+  transaction: UpdateTransactionInterface,
+) => {
+  await dtMoneyApi.put(`/transaction`, transaction);
 };
