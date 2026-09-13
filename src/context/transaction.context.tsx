@@ -21,6 +21,8 @@ export type TransactionContextType = {
   fetchTransactions: () => Promise<void>;
   totalTransactions: TotalTransactions;
   transactions: Transaction[];
+  refreshTransactions: () => void;
+  loading: boolean;
 };
 
 export const TransactionContext = createContext({} as TransactionContextType);
@@ -29,8 +31,8 @@ export const TransactionContextProvider: FC<PropsWithChildren> = ({
   children,
 }) => {
   const [categories, setCategories] = useState<TransactionCategory[]>([]);
+  const [loading, setLoading] = useState(false);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  console.log(transactions);
   const [totalTransactions, setTotalTransactions] = useState<TotalTransactions>(
     {
       expense: 0,
@@ -38,6 +40,18 @@ export const TransactionContextProvider: FC<PropsWithChildren> = ({
       total: 0,
     },
   );
+
+  const refreshTransactions = async () => {
+    setLoading(true);
+    const transactionsResponse = await transactionService.getTransactions({
+      page: 1,
+      perPage: 10,
+    });
+    // Do something with the fetched transactions, e.g., update state
+    setTransactions(transactionsResponse.data);
+    setTotalTransactions(transactionsResponse.totalTransactions);
+    setLoading(false);
+  };
 
   const fetchCategories = async () => {
     const categoriesResponse =
@@ -47,10 +61,12 @@ export const TransactionContextProvider: FC<PropsWithChildren> = ({
 
   const createTransaction = async (transaction: CreateTransactionInterface) => {
     await transactionService.createTransaction(transaction);
+    await refreshTransactions(); // Refresh transactions after creating a new one
   };
 
   const updateTransaction = async (transaction: UpdateTransactionInterface) => {
     await transactionService.updateTransaction(transaction);
+    await refreshTransactions(); // Refresh transactions after updating
   };
 
   const fetchTransactions = useCallback(async () => {
@@ -73,6 +89,8 @@ export const TransactionContextProvider: FC<PropsWithChildren> = ({
         fetchTransactions,
         totalTransactions,
         transactions,
+        loading,
+        refreshTransactions,
       }}
     >
       {children}
