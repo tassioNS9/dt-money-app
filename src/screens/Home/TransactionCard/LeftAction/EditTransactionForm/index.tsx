@@ -13,7 +13,6 @@ import { useBottomSheetContext } from "@/context/bottomsheet.context";
 import CurrencyInput from "react-native-currency-input";
 import { editTransactionSchema } from "./schema";
 import * as Yup from "yup";
-
 import { updateTransaction } from "@/shared/services/dt-money/transaction.service";
 import { useErrorHandler } from "@/shared/hooks/useErrorHandler";
 import { ErrorMessage } from "@/components/ErrorMessage";
@@ -21,6 +20,7 @@ import { SelectCategoryModal } from "@/components/SelectCategoryModal";
 import { TransactionTypeSelector } from "@/components/SelectType";
 import { AppButton } from "@/components/AppButton";
 import { Transaction } from "@/shared/interfaces/transaction";
+import { useTransactionContext } from "@/context/transaction.context";
 
 type ValidationErrorsTypes = Record<keyof UpdateTransactionInterface, string>;
 
@@ -34,7 +34,6 @@ export const EditTransactionForm: FC<Params> = ({
   const { closeBottomSheet } = useBottomSheetContext();
   const { handleError } = useErrorHandler();
   const [loading, setLoading] = useState(false);
-  console.log(transactionToUpdate);
 
   const [transaction, setTransaction] = useState<UpdateTransactionInterface>({
     id: transactionToUpdate.id,
