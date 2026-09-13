@@ -6,6 +6,7 @@ import { DeleteModal } from "./DeleteModal";
 import * as transactionService from "@/shared/services/dt-money/transaction.service";
 import { useErrorHandler } from "@/shared/hooks/useErrorHandler";
 import { useSnackbarContext } from "@/context/snackbar.context";
+import { useTransactionContext } from "@/context/transaction.context";
 
 interface Params {
   transactionId: number;
@@ -13,6 +14,7 @@ interface Params {
 
 export const RightAction: FC<Params> = ({ transactionId }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const { refreshTransactions } = useTransactionContext();
 
   const showModal = () => setModalVisible(true);
 
@@ -26,6 +28,7 @@ export const RightAction: FC<Params> = ({ transactionId }) => {
     try {
       setLoading(true);
       await transactionService.deleteTransaction(transactionId);
+      await refreshTransactions(); // Refresh transactions after deletion
       notify({
         type: "SUCCESS",
         message: "Transação apagada com sucesso!",
