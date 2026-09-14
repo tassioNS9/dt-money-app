@@ -75,7 +75,7 @@ export const BottomSheetProvider: FC<PropsWithChildren> = ({ children }) => {
         enablePanDownToClose
         onChange={handleSheetChanges}
         backgroundStyle={{
-          backgroundColor: colors.gray[800],
+          backgroundColor: colors["background-secondary"],
           borderTopLeftRadius: 32,
           borderTopRightRadius: 32,
           elevation: 9,
