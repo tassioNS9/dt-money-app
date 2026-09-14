@@ -137,7 +137,6 @@ export const TransactionContextProvider: FC<PropsWithChildren> = ({
   );
 
   const loadMoreTransactions = useCallback(async () => {
-    handleLoadings({ key: "loadMore", value: true });
     if (loadings.loadMore || pagination.page >= pagination.totalPages) return;
     fetchTransactions({ page: pagination.page + 1 });
   }, [loadings.loadMore, pagination]);
