@@ -1,11 +1,12 @@
 import { useTransactionContext } from "@/context/transaction.context";
 import { useErrorHandler } from "@/shared/hooks/useErrorHandler";
 import { useEffect } from "react";
-import { FlatList, RefreshControl } from "react-native";
+import { ActivityIndicator, FlatList, RefreshControl } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ListHeader } from "./ListHeader";
 import { TransactionCard } from "./TransactionCard";
 import { EmptyList } from "./EmptyList";
+import { colors } from "@/shared/colors";
 
 export const Home = () => {
   const {
@@ -78,11 +79,19 @@ export const Home = () => {
         className="bg-background-secondary"
         ListHeaderComponent={ListHeader}
         data={transactions}
-        keyExtractor={(item) => `transaction-${item.id}`}
+        keyExtractor={({ id }) => `transaction-${id}`}
         renderItem={({ item }) => <TransactionCard transaction={item} />}
         onEndReached={handleLoadMoreTransactions}
         onEndReachedThreshold={0.5}
-        ListEmptyComponent={loadings.initial ? null : EmptyList}
+        ListFooterComponent={
+          loadings.loadMore ? (
+            <ActivityIndicator
+              color={colors["accent-brand-light"]}
+              size="large"
+            />
+          ) : null
+        }
+        ListEmptyComponent={loadings.initial ? null : <EmptyList />}
         // O loadings.initial é para não mostrar a mensagem de lista vazia enquanto está carregando as transações iniciais,
         //  evitando que o usuário veja a mensagem de "Nenhuma transação encontrada" antes que os dados sejam carregados.
         refreshControl={
