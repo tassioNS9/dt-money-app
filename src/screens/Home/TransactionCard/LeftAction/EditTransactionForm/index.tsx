@@ -20,7 +20,6 @@ import { SelectCategoryModal } from "@/components/SelectCategoryModal";
 import { TransactionTypeSelector } from "@/components/SelectType";
 import { AppButton } from "@/components/AppButton";
 import { Transaction } from "@/shared/interfaces/transaction";
-import { useTransactionContext } from "@/context/transaction.context";
 
 type ValidationErrorsTypes = Record<keyof UpdateTransactionInterface, string>;
 
